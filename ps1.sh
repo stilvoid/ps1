@@ -6,7 +6,22 @@ colourise() {
 git_branch() {
 	gitbranch=$(git branch 2>/dev/null | grep "*" | awk '{print $2}')
 	if [ -n "$gitbranch" ]; then
-        echo git: $gitbranch
+        tracking=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)
+
+        if [ -n "$tracking" ]; then
+            left="$(git cherry HEAD "$tracking")"
+            right="$(git cherry "$tracking" HEAD)"
+
+            if [ -n "$left" -a -n "$right" ]; then
+                state=" (<>)"
+            elif [ -n "$left" ]; then
+                state=" (<<)"
+            elif [ -n "$right" ]; then
+                state=" (>>)"
+            fi
+        fi
+
+        echo git: ${gitbranch}${state}
 	fi
 }
 
@@ -17,6 +32,8 @@ aws_profile() {
 }
 
 do_plugins() {
+    colourise "1;30" "---"
+
     for plugin in ${ps1_plugins[@]}; do
         colour=${ps1_colours[$plugin]-37}
 
