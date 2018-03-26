@@ -31,6 +31,16 @@ aws_profile() {
     fi
 }
 
+python_virtualenv() {
+    if [ -n "$VIRTUAL_ENV" ]; then
+        echo virtualenv: $(basename $VIRTUAL_ENV)
+    fi
+}
+
 location() {
-    echo "\u@\h:\w"
+    echo "cwd: \w"
+}
+
+ssh_location() {
+    echo "location: \u@\h:\w"
 }
