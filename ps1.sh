@@ -17,32 +17,38 @@ aws_profile() {
 }
 
 do_plugins() {
-    prompt=""
-    for plugin in ${!ps1_plugins[@]}; do
-        colour=${ps1_plugins[$plugin]}
+    for plugin in ${ps1_plugins[@]}; do
+        colour=${ps1_colours[$plugin]-37}
+
         output=$(eval $plugin)
 
         if [ -n "$output" ]; then
-            prompt+=$(colourise "$colour" "$output")
-            prompt+="\n"
+            colourise "$colour" "$output"
         fi
     done
 
-    if [ -n "$prompt" ]; then
-        echo -e "$prompt\033"
-    fi
+    echo "\[\]"
+}
+
+location() {
+    echo "\u@\h:\w"
 }
 
 prompt() {
-    echo -n '$(do_plugins)'
-    colourise "1;37" "\u@\h:\w"
-    echo "> "
+    export PS1="$(do_plugins)> "
 }
 
-if [ -z ${ps1_plugins+x} ]; then
-    declare -A ps1_plugins=()
-    ps1_plugins[git_branch]="36"
-    ps1_plugins[aws_profile]="33"
+# Set some defaults
+if [ -z "${ps1_plugins[@]+x}" ]; then
+    ps1_plugins=(git_branch aws_profile location)
 fi
 
-export PS1=$(prompt)
+if [ -z "${ps1_colours[@]+x}" ]; then
+    declare -A ps1_colours=(
+        [git_branch]=32
+        [aws_profile]=33
+        [location]="1;37"
+    )
+fi
+
+PROMPT_COMMAND=prompt
