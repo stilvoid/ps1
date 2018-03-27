@@ -6,22 +6,26 @@ colourise() {
 git_branch() {
 	gitbranch=$(git branch 2>/dev/null | grep "*" | awk '{print $2}')
 	if [ -n "$gitbranch" ]; then
-        tracking=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)
+        changes="[$(git status -s | wc -l)]"
+        if [ "$changes" == "[0]" ]; then
+            changes=""
+        fi
 
+        tracking=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)
         if [ -n "$tracking" ]; then
             left="$(git cherry HEAD "$tracking")"
             right="$(git cherry "$tracking" HEAD)"
 
             if [ -n "$left" -a -n "$right" ]; then
-                state=" (<>)"
+                state=" (<> $tracking)"
             elif [ -n "$left" ]; then
-                state=" (<<)"
+                state=" (<< $tracking)"
             elif [ -n "$right" ]; then
-                state=" (>>)"
+                state=" (>> $tracking)"
             fi
         fi
 
-        echo git: ${gitbranch}${state}
+        echo git: ${gitbranch}${changes}${state}
 	fi
 }
 
