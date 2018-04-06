@@ -22,6 +22,7 @@ prompt() {
     fi
 
     export PS1="${ps1_preamble}$(do_plugins)${ps1_prompt}"
+    export PS2="... "
 }
 
 # Set some defaults
