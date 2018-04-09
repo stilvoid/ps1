@@ -14,9 +14,11 @@ do_plugins() {
     echo "\[\]"
 }
 
-last_prompt=""
-
 prompt() {
+    if [ -z "${ps1_preamble+x}" ]; then
+        ps1_preamble="$(colourise "1;30" "---")\n"
+    fi
+
     if [ -z "${ps1_prompt+x}" ]; then
         ps1_prompt="[\u@\h]$ "
     fi
@@ -37,10 +39,6 @@ if [ -z "${ps1_colours[@]+x}" ]; then
         [aws_profile]=33
         [location]="1;37"
     )
-fi
-
-if [ -z "${ps1_preable+x}" ]; then
-    ps1_preamble="$(colourise "1;30" "---")\n"
 fi
 
 PROMPT_COMMAND=prompt
