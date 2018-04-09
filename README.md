@@ -9,5 +9,6 @@ Includes:
 
 ## Usage
 
-    ps1_prompt="\u> "
-    . ~/path/to/ps1.sh
+Put the following somewhere in your .bashrc
+
+    . /path/to/ps1.sh
