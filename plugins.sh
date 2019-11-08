@@ -31,7 +31,11 @@ git_branch() {
 
 aws_profile() {
     if [ -n "$AWS_PROFILE" ]; then
-        region=$(aws configure get region)
+        if [ -n "$AWS_DEFAULT_REGION" ]; then
+            region=$AWS_DEFAULT_REGION
+        else
+            region=$(aws configure get region)
+        fi
 
         if [ -n "$region" ]; then
             region="($region)"
