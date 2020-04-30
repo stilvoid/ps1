@@ -29,12 +29,13 @@ prompt() {
 
 # Set some defaults
 if [ -z "${ps1_plugins[@]+x}" ]; then
-    ps1_plugins=(python_virtualenv git_branch aws_profile location)
+    ps1_plugins=(python_virtualenv node_virtualenv git_branch aws_profile location)
 fi
 
 if [ -z "${ps1_colours[@]+x}" ]; then
     declare -A ps1_colours=(
         [python_virtualenv]=34
+        [node_virtualenv]=35
         [git_branch]=32
         [aws_profile]=33
         [location]="1;37"

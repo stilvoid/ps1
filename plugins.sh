@@ -51,6 +51,12 @@ python_virtualenv() {
     fi
 }
 
+node_virtualenv() {
+    if [ -n "$NODE_VIRTUAL_ENV" ]; then
+        echo nodeenv: $(basename $NODE_VIRTUAL_ENV)
+    fi
+}
+
 location() {
     echo "cwd: \w"
 }
